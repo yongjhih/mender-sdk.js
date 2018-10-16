@@ -1,0 +1,10 @@
+# Site settings
+title: Mender SDK
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "https://mender-sdk.herokuapp.com" # the base hostname & protocol for your site
+
+# Build settings
+markdown: kramdown
+
+jekyll_auth:
+  ssl: true

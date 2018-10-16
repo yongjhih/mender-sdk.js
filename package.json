@@ -6,6 +6,7 @@
   "author": "Andrew Chen <yongjhih@gmail.com>",
   "license": "",
   "devDependencies": {
+    "autorest": "^2.0.4283",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-plugin-flow-runtime": "^0.17.0",

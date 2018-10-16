@@ -16,6 +16,17 @@ mender.login(username, password)
   });
 ```
 
+## Docs
+
+* ref. https://docs.mender.io/1.6/apis
+* Device Inventory, ref. https://github.com/mendersoftware/inventory/blob/master/docs/
+* Device Admission, ref. https://github.com/mendersoftware/deviceadm/tree/master/docs/
+* ref. https://github.com/mendersoftware/deviceauth/tree/master/docs
+
+## Refs
+
+ref. https://github.com/azure/autorest.typescript
+
 ## Installation
 
 ```sh

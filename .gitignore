@@ -8,7 +8,6 @@ lib/*/*.js
 flow-typed/npm/
 flow-coverage/
 jsdoc2flow/
-docs/
 coverage/
 .idea/
 package-lock.json
