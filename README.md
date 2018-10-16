@@ -23,7 +23,12 @@ mender.login(username, password)
 * Device Admission, ref. https://github.com/mendersoftware/deviceadm/tree/master/docs/
 * ref. https://github.com/mendersoftware/deviceauth/tree/master/docs
 
-## Refs
+## Code Generate from swagger by autorest
+
+
+```sh
+yarn run autorest --input-file=docs/_data/mender.yml --nodejs --output-folder=autorest
+```
 
 ref. https://github.com/azure/autorest.typescript
 
