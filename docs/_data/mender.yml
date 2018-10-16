@@ -20,6 +20,7 @@ schemes:
 paths:
   /devices:
     get:
+      operationId: getDevices
       summary: List devices
       description:  |
         Returns a paged collection of devices and their attributes.
@@ -121,6 +122,7 @@ paths:
             $ref: '#/definitions/Error'
   /devices/{id}:
     get:
+      operationId: getDevices
       summary: Get a selected device
       description: Returns the details of the selected devices, including its attributes.
       parameters:
@@ -165,6 +167,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
     delete:
+      operationId: removeDevice
       summary: Remove selected device
       description: Deletes all information concerning the device, including its attributes.
       parameters:
@@ -189,6 +192,7 @@ paths:
 
   /devices/{id}/group:
     get:
+      operationId: getGroup
       summary: Get a selected device's group
       parameters:
         - name: Authorization
@@ -224,6 +228,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
     put:
+      operationId: addGroupDevice
       summary: Add a device to a group
       description: |
         Adds a device to a group.
@@ -264,6 +269,7 @@ paths:
             $ref: "#/definitions/Error"
   /devices/{id}/group/{name}:
     delete:
+      operationId: removeGroupDevice
       summary: Remove a device from a group
       description: |
         Removes the device with identifier 'id' from the group 'group'.
@@ -297,6 +303,7 @@ paths:
             $ref: '#/definitions/Error'
   /groups:
     get:
+      operationId: getGroups
       summary: List groups
       description: Returns a collection of all defined device groups.
       responses:
@@ -320,6 +327,7 @@ paths:
 
   /groups/{name}/devices:
     get:
+      operationId: getGroupDevices
       summary: List the devices belonging to a given group
       description: |
         Returns a paged collection of device IDs.
