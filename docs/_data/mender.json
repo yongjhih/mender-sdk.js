@@ -1,0 +1,547 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "An API for device attribute management and device grouping. Intended for use by the web GUI.\n\nDevices can upload vendor-specific attributes (software/hardware info, health checks, metrics, etc.) of various data types to the backend.\n\nThis API enables the user to:\n* list devices with their attributes\n* search devices by attribute value\n* use the results to create and manage device groups for the purpose of deployment scheduling\n",
+    "version" : "1",
+    "title" : "Device inventory"
+  },
+  "host" : "docker.mender.io",
+  "basePath" : "/api/management/v1/inventory",
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/devices" : {
+      "get" : {
+        "summary" : "List devices",
+        "description" : "Returns a paged collection of devices and their attributes.\nAccepts optional search and sort parameters.\n\n**Searching**\nSearching by attributes values is accomplished by appending attribute\nname/value pairs to the query string, e.g.:\n\n```\nGET /devices?attr_name_1=foo&\n             attr_name_2=100&\n             ...\n```\n",
+        "operationId" : "getDevices",
+        "parameters" : [ {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "Contains the JWT token issued by the User Administration and Authentication Service.",
+          "required" : true,
+          "type" : "string",
+          "format" : "Bearer [token]"
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "Starting page.",
+          "required" : false,
+          "type" : "number",
+          "default" : 1.0,
+          "format" : "integer"
+        }, {
+          "name" : "per_page",
+          "in" : "query",
+          "description" : "Number of results per page.",
+          "required" : false,
+          "type" : "number",
+          "default" : 10.0,
+          "format" : "integer"
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "Supports sorting the device list by attribute values.\n\nThe parameter is formatted as a list of attribute names and sort directions, e.g.:\n\n'?sort=attr1:asc, attr2:desc'\n\nwill sort by 'attr1' ascending, and then by 'attr2' descending. 'desc' is the default\nsort direction, and can be omitted.\n",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "has_group",
+          "in" : "query",
+          "description" : "If present, limits the results only to devices assigned/not assigned to a group.",
+          "required" : false,
+          "type" : "boolean"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response.",
+            "schema" : {
+              "type" : "array",
+              "title" : "ListOfDevices",
+              "items" : {
+                "$ref" : "#/definitions/Device"
+              }
+            },
+            "examples" : {
+              "application/json" : [ {
+                "id" : "291ae0e5956c69c2267489213df4459d19ed48a806603def19d417d004a4b67e",
+                "attributes" : [ {
+                  "name" : "ip_addr",
+                  "value" : "1.2.3.4",
+                  "description" : "IP address"
+                }, {
+                  "name" : "mac_addr",
+                  "value" : "00.01:02:03:04:05",
+                  "description" : "MAC address"
+                }, {
+                  "name" : "ports",
+                  "value" : [ "8080", "8081" ],
+                  "description" : "Open ports"
+                } ],
+                "updated_ts" : "2016-10-03T16:58:51.639Z"
+              }, {
+                "id" : "76f40e5956c699e327489213df4459d1923e1a806603def19d417d004a4a3ef",
+                "attributes" : [ {
+                  "name" : "mac",
+                  "value" : "00:01:02:03:04:05",
+                  "description" : "MAC address"
+                } ],
+                "updated_ts" : "2016-10-04T18:24:21.432Z"
+              } ]
+            },
+            "headers" : {
+              "Link" : {
+                "type" : "string",
+                "description" : "Standard header, used for page navigation.\n\nSupported relation types are 'first', 'next' and 'prev'.\n"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Missing or malformed request parameters. See error for details.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "Internal error.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/devices/{id}" : {
+      "get" : {
+        "summary" : "Get a selected device",
+        "description" : "Returns the details of the selected devices, including its attributes.",
+        "operationId" : "getDevices",
+        "parameters" : [ {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "Contains the JWT token issued by the User Administration and Authentication Service.",
+          "required" : true,
+          "type" : "string",
+          "format" : "Bearer [token]"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Device identifier.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response - the device was found.",
+            "schema" : {
+              "$ref" : "#/definitions/Device"
+            },
+            "examples" : {
+              "application/json" : {
+                "id" : "291ae0e5956c69c2267489213df4459d19ed48a806603def19d417d004a4b67e",
+                "attributes" : [ {
+                  "name" : "ip_addr",
+                  "value" : "1.2.3.4",
+                  "description" : "IP address"
+                }, {
+                  "name" : "mac_addr",
+                  "value" : "00.01:02:03:04:05",
+                  "description" : "MAC address"
+                }, {
+                  "name" : "ports",
+                  "value" : [ "8080", "8081" ],
+                  "description" : "Open ports"
+                } ],
+                "updated_ts" : "2016-10-03T16:58:51.639Z"
+              }
+            }
+          },
+          "404" : {
+            "description" : "The device was not found.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Remove selected device",
+        "description" : "Deletes all information concerning the device, including its attributes.",
+        "operationId" : "removeDevice",
+        "parameters" : [ {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "Contains the JWT token issued by the User Administration and Authentication Service.",
+          "required" : true,
+          "type" : "string",
+          "format" : "Bearer [token]"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Device identifier.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Device removed"
+          },
+          "500" : {
+            "description" : "Internal server error.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/devices/{id}/group" : {
+      "get" : {
+        "summary" : "Get a selected device's group",
+        "operationId" : "getGroup",
+        "parameters" : [ {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "Contains the JWT token issued by the User Administration and Authentication Service.",
+          "required" : true,
+          "type" : "string",
+          "format" : "Bearer [token]"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Device identifier.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response.\n\nIf the device is not assigned to any group, the 'group' field will be set to 'null'.\n",
+            "schema" : {
+              "$ref" : "#/definitions/Group"
+            },
+            "examples" : {
+              "application/json" : {
+                "group" : "testing"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Missing or malformed request params or body. See the error message for details."
+          },
+          "404" : {
+            "description" : "The device was not found.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Add a device to a group",
+        "description" : "Adds a device to a group.\n\nNote that a given device can belong to at most one group.\nIf a device already belongs to some group, it will be moved\nto the selected one.\n",
+        "operationId" : "addGroupDevice",
+        "parameters" : [ {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "Contains the JWT token issued by the User Administration and Authentication Service.",
+          "required" : true,
+          "type" : "string",
+          "format" : "Bearer [token]"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Device identifier.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "group",
+          "description" : "Group descriptor.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Group"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Success - the device was added to the group."
+          },
+          "400" : {
+            "description" : "Missing or malformed request params or body. See the error message for details."
+          },
+          "404" : {
+            "description" : "The device was not found.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/devices/{id}/group/{name}" : {
+      "delete" : {
+        "summary" : "Remove a device from a group",
+        "description" : "Removes the device with identifier 'id' from the group 'group'.\n",
+        "operationId" : "removeGroupDevice",
+        "parameters" : [ {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "Contains the JWT token issued by the User Administration and Authentication Service.",
+          "required" : true,
+          "type" : "string",
+          "format" : "Bearer [token]"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Device identifier.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "name",
+          "in" : "path",
+          "description" : "Group name.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "The device was successfully removed from the group."
+          },
+          "404" : {
+            "description" : "The device was not found or doesn't belong to the group.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "Internal error.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/groups" : {
+      "get" : {
+        "summary" : "List groups",
+        "description" : "Returns a collection of all defined device groups.",
+        "operationId" : "getGroups",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response.",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string",
+                "description" : "Group name",
+                "title" : "ListOfGroupNames"
+              }
+            },
+            "examples" : {
+              "application/json" : [ "staging", "testing", "production" ]
+            }
+          },
+          "500" : {
+            "description" : "Internal server error.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/groups/{name}/devices" : {
+      "get" : {
+        "summary" : "List the devices belonging to a given group",
+        "description" : "Returns a paged collection of device IDs.\n",
+        "operationId" : "getGroupDevices",
+        "parameters" : [ {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "Contains the JWT token issued by the User Administration and Authentication Service.",
+          "required" : true,
+          "type" : "string",
+          "format" : "Bearer [token]"
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "Starting page.",
+          "required" : false,
+          "type" : "number",
+          "default" : 1.0,
+          "format" : "integer"
+        }, {
+          "name" : "per_page",
+          "in" : "query",
+          "description" : "Number of results per page.",
+          "required" : false,
+          "type" : "number",
+          "default" : 10.0,
+          "format" : "integer"
+        }, {
+          "name" : "name",
+          "in" : "path",
+          "description" : "Group name.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "schema" : {
+              "type" : "array",
+              "title" : "ListOfIDs",
+              "items" : {
+                "type" : "string"
+              }
+            },
+            "headers" : {
+              "Link" : {
+                "type" : "string",
+                "description" : "Standard header, we support 'first', 'next', and 'prev'."
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request parameters.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The group was not found.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Attribute" : {
+      "type" : "object",
+      "required" : [ "name", "value" ],
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "description" : "A human readable, unique attribute ID, e.g. 'device_type', 'ip_addr', 'cpu_load', etc.\n"
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Attribute description."
+        },
+        "value" : {
+          "type" : "string",
+          "description" : "The current value of the attribute.\n\nAttribute type is implicit, inferred from the JSON type.\n\nSupported types: number, string, array of numbers, array of strings. Mixed arrays are not allowed.\n"
+        }
+      },
+      "description" : "Attribute descriptor.",
+      "example" : {
+        "application/json" : {
+          "name" : "cpu_load",
+          "description" : "The current CPU load.",
+          "value" : 42
+        }
+      }
+    },
+    "Device" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "Mender-assigned unique ID."
+        },
+        "updated_ts" : {
+          "type" : "string",
+          "description" : "Timestamp of the most recent attribute update."
+        },
+        "attributes" : {
+          "type" : "array",
+          "description" : "A list of attribute descriptors.",
+          "items" : {
+            "$ref" : "#/definitions/Attribute"
+          }
+        }
+      },
+      "example" : {
+        "application/json" : {
+          "id" : "291ae0e5956c69c2267489213df4459d19ed48a806603def19d417d004a4b67e",
+          "attributes" : [ {
+            "name" : "ip_addr",
+            "value" : "1.2.3.4",
+            "description" : "IP address"
+          }, {
+            "name" : "mac_addr",
+            "value" : "00.01:02:03:04:05",
+            "description" : "MAC address"
+          }, {
+            "name" : "ports",
+            "value" : [ "8080", "8081" ],
+            "description" : "Open ports"
+          } ],
+          "updated_ts" : "2016-10-03T16:58:51.639Z"
+        }
+      }
+    },
+    "Group" : {
+      "type" : "object",
+      "required" : [ "group" ],
+      "properties" : {
+        "group" : {
+          "type" : "string"
+        }
+      },
+      "description" : "Device group.",
+      "example" : {
+        "application/json" : {
+          "group" : "staging"
+        }
+      }
+    },
+    "Error" : {
+      "type" : "object",
+      "properties" : {
+        "error" : {
+          "type" : "string",
+          "description" : "Description of the error."
+        },
+        "request_id" : {
+          "type" : "string",
+          "description" : "Request ID (same as in X-MEN-RequestID header)."
+        }
+      },
+      "description" : "Error descriptor.",
+      "example" : {
+        "application/json" : {
+          "error" : "failed to decode device group data: JSON payload is empty",
+          "request_id" : "f7881e82-0492-49fb-b459-795654e7188a"
+        }
+      }
+    }
+  }
+}
