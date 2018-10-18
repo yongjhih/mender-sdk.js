@@ -15,3 +15,5 @@ yarn-error.log
 .scannerwork/
 .a.json
 *.orig
+.swagger-codegen/
+.swagger-codegen-ignore

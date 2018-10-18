@@ -18,10 +18,16 @@ mender.login(username, password)
 
 ## Docs
 
-* ref. https://docs.mender.io/1.6/apis
-* Device Inventory, ref. https://github.com/mendersoftware/inventory/blob/master/docs/
-* Device Admission, ref. https://github.com/mendersoftware/deviceadm/tree/master/docs/
-* ref. https://github.com/mendersoftware/deviceauth/tree/master/docs
+* https://docs.mender.io/1.6/apis
+* Mender Device Authentication Service
+* Mender Deployment Service: https://github.com/mendersoftware/deployments
+* Mender Device Inventory Service:
+  - https://github.com/mendersoftware/inventory
+  - https://github.com/mendersoftware/deviceadm
+* Mender User Administration Service: https://github.com/mendersoftware/useradm
+* Mender API Gateway
+* Minio object storage
+* Storage service proxy based on OpenResty
 
 ## Code Generate from swagger by autorest
 
