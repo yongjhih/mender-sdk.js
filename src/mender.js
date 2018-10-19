@@ -24,11 +24,11 @@ export type Attribute = {
    * A human readable, unique attribute ID, e.g. 'device_type', 'ip_addr', 'cpu_load', etc.
 
    */
-  name: ?string,
+  name: void | ?string,
   /**
    * Attribute description.
    */
-  description: ?string,
+  description: void | ?string,
   /**
    * The current value of the attribute.
 
@@ -37,7 +37,7 @@ Attribute type is implicit, inferred from the JSON type.
 Supported types: number, string, array of numbers, array of strings. Mixed arrays are not allowed.
 
    */
-  value: ?string,
+  value: void | ?string,
 };
 
 
@@ -49,11 +49,11 @@ export type NewDeployment = {
   /**
    *
    */
-  name: ?string,
+  name: void | ?string,
   /**
    *
    */
-  artifact_name: ?string,
+  artifact_name: void | ?string,
   /**
    *
    */
@@ -68,35 +68,35 @@ export type Deployment = {
   /**
    *
    */
-  created: ?string,
+  created: void | ?string,
   /**
    *
    */
-  name: ?string,
+  name: void | ?string,
   /**
    *
    */
-  artifact_name: ?string,
+  artifact_name: void | ?string,
   /**
    *
    */
-  id: ?string,
+  id: void | ?string,
   /**
    *
    */
-  finished: ?string,
+  finished: void | ?string,
   /**
    *
    */
-  status: ?string,
+  status: void | ?string,
   /**
    *
    */
-  device_count: ?number,
+  device_count: void | ?number,
   /**
    *
    */
-  artifacts: Array<?string>,
+  artifacts: void | ?Array<?string>,
 };
 
 
@@ -107,40 +107,40 @@ export type DeploymentStatistics = {
   /**
    * Number of successful deployments.
    */
-  success: ?number,
+  success: void | ?number,
   /**
    * Number of pending deployments.
    */
-  pending: ?number,
+  pending: void | ?number,
   /**
    * Number of deployments being downloaded.
    */
-  downloading: ?number,
+  downloading: void | ?number,
   /**
    * Number of deployments devices are rebooting into.
    */
-  rebooting: ?number,
+  rebooting: void | ?number,
   /**
    * Number of deployments devices being installed.
    */
-  installing: ?number,
+  installing: void | ?number,
   /**
    * Number of failed deployments.
    */
-  failure: ?number,
+  failure: void | ?number,
   /**
    * Do not have appropriate artifact for device type.
    */
-  noartifact: ?number,
+  noartifact: void | ?number,
   /**
    * Number of devices unaffected by upgrade, since they are already running the specified software version.
    */
-  already_installed: ?number,
-  //already-installed: ?number,
+  already_installed: void | ?number,
+  //already-installed: void | ?number,
   /**
    * Number of deployments aborted by user.
    */
-  aborted: ?number,
+  aborted: void | ?number,
 };
 
 
@@ -151,35 +151,35 @@ export type DeploymentDevice = {
   /**
    * Device identifier.
    */
-  id: ?string,
+  id: void | ?string,
   /**
    *
    */
-  finished: ?string,
+  finished: void | ?string,
   /**
    *
    */
-  status: ?string,
+  status: void | ?string,
   /**
    *
    */
-  created: ?string,
+  created: void | ?string,
   /**
    *
    */
-  device_type: ?string,
+  device_type: void | ?string,
   /**
    * Availability of the device's deployment log.
    */
-  log: ?boolean,
+  log: void | ?boolean,
   /**
    * State reported by device
    */
-  state: ?string,
+  state: void | ?string,
   /**
    * Additional state information
    */
-  substate: ?string,
+  substate: void | ?string,
 };
 
 
@@ -190,7 +190,7 @@ export type ArtifactUpdate = {
   /**
    *
    */
-  description: ?string,
+  description: void | ?string,
 };
 
 
@@ -202,7 +202,7 @@ export type ArtifactTypeInfo = {
   /**
    *
    */
-  type: ?string,
+  type: void | ?string,
 };
 
 
@@ -214,19 +214,19 @@ export type UpdateFile = {
   /**
    *
    */
-  name: ?string,
+  name: void | ?string,
   /**
    *
    */
-  checksum: ?string,
+  checksum: void | ?string,
   /**
    *
    */
-  size: ?number,
+  size: void | ?number,
   /**
    *
    */
-  date: ?string,
+  date: void | ?string,
 };
 
 
@@ -238,7 +238,7 @@ export type Update = {
   /**
    *
    */
-  type_info: ?ArtifactTypeInfo,
+  type_info: void | ?ArtifactTypeInfo,
   /**
    *
    */
@@ -247,7 +247,7 @@ export type Update = {
    * meta_data is an object of unknown structure as this is dependent of update type (also custom defined by user)
 
    */
-  meta_data: ?object,
+  meta_data: void | ?any,
 };
 
 
@@ -259,11 +259,11 @@ export type ArtifactInfo = {
   /**
    *
    */
-  format: ?string,
+  format: void | ?string,
   /**
    *
    */
-  version: ?number,
+  version: void | ?number,
 };
 
 
@@ -274,36 +274,36 @@ export type Artifact = {
   /**
    *
    */
-  name: ?string,
+  name: void | ?string,
   /**
    *
    */
-  description: ?string,
+  description: void | ?string,
   /**
    *
    */
-  device_types_compatible: Array<?string>,
+  device_types_compatible: void | ?Array<?string>,
   /**
    *
    */
-  id: ?string,
+  id: void | ?string,
   /**
    * Idicates if artifact is signed or not.
    */
-  signed: ?boolean,
+  signed: void | ?boolean,
   /**
    * Represents creation / last edition of any of the artifact properties.
 
    */
-  modified: ?string,
+  modified: void | ?string,
   /**
    *
    */
-  info: ?ArtifactInfo,
+  info: void | ?ArtifactInfo,
   /**
    *
    */
-  updates: Array<?Update>,
+  updates: void | ?Array<?Update>,
 };
 
 
@@ -314,11 +314,11 @@ export type ArtifactLink = {
   /**
    *
    */
-  uri: ?string,
+  uri: void | ?string,
   /**
    *
    */
-  expire: ?string,
+  expire: void | ?string,
 };
 
 
@@ -330,12 +330,12 @@ export type StorageLimit = {
    * Storage limit in bytes. If set to 0 - there is no limit for storage.
 
    */
-  limit: ?number,
+  limit: void | ?number,
   /**
    * Current storage usage in bytes.
 
    */
-  usage: ?number,
+  usage: void | ?number,
 };
 
 
@@ -347,12 +347,12 @@ export type Release = {
    * release name.
 
    */
-  name: ?string,
+  name: void | ?string,
   /**
    * list of artifacts for this release.
 
    */
-  artifacts: Array<?Artifact>,
+  artifacts: void | ?Array<?Artifact>,
 };
 
 
@@ -364,15 +364,15 @@ export type Device = {
   /**
    * Mender-assigned unique ID.
    */
-  id: ?string,
+  id: void | ?string,
   /**
    * Timestamp of the most recent attribute update.
    */
-  updated_ts: ?string,
+  updated_ts: void | ?string,
   /**
    * A list of attribute descriptors.
    */
-  attributes: Array<?Attribute>,
+  attributes: void | ?Array<Attribute>,
 };
 
 
@@ -394,11 +394,11 @@ export type Error = {
   /**
    * Description of the error.
    */
-  error: ?string,
+  error: void | ?string,
   /**
    * Request ID (same as in X-MEN-RequestID header).
    */
-  request_id: ?string,
+  request_id: void | ?string,
 };
 
 /**
@@ -408,11 +408,11 @@ export type UserNew = {
   /**
    * A unique email address. Invalid characters are non-ascii and '+'.
    */
-  email: ?string,
+  email: void | ?string,
   /**
    * Password.
    */
-  password: ?string,
+  password: void | ?string,
 };
 
 
@@ -423,11 +423,11 @@ export type UserUpdate = {
   /**
    * A unique email address.
    */
-  email: ?string,
+  email: void | ?string,
   /**
    * Password.
    */
-  password: ?string,
+  password: void | ?string,
 };
 
 
@@ -438,21 +438,21 @@ export type User = {
   /**
    * A unique email address.
    */
-  email: ?string,
+  email: void | ?string,
   /**
    * User Id.
    */
-  id: ?string,
+  id: void | ?string,
   /**
    * Server-side timestamp of the user creation.
 
    */
-  created_ts: ?string,
+  created_ts: void | ?string,
   /**
    * Server-side timestamp of the last user information update.
 
    */
-  updated_ts: ?string,
+  updated_ts: void | ?string,
 };
 
 
@@ -469,15 +469,15 @@ export type NewDevice = {
   /**
    * The identity data of the device.
    */
-  device_identity: ?string,
+  device_identity: void | ?string,
   /**
    * Device public key
    */
-  key: ?string,
+  key: void | ?string,
   /**
    * System-assigned device ID.
    */
-  device_id: ?string,
+  device_id: void | ?string,
 };
 
 
@@ -488,11 +488,11 @@ export type AuthSet = {
   /**
    * The identity data of the device.
    */
-  device_identity: ?string,
+  device_identity: void | ?string,
   /**
    * Device public key.
    */
-  key: ?string,
+  key: void | ?string,
 };
 
 
@@ -503,31 +503,31 @@ export type AdmissionDevice = {
   /**
    * Authentication data set identifier.
    */
-  id: ?string,
+  id: void | ?string,
   /**
    * System assigned device identifier.
    */
-  device_id: ?string,
+  device_id: void | ?string,
   /**
    * Identity data
    */
-  device_identity: ?string,
+  device_identity: void | ?string,
   /**
    * Device public key
    */
-  key: ?string,
+  key: void | ?string,
   /**
    * Status of the admission process for device authentication data set
    */
-  status: ?string,
+  status: void | ?string,
   /**
    *
    */
-  attributes: ?AdmissionAttributes,
+  attributes: void | ?AdmissionAttributes,
   /**
    * Server-side timestamp of the request reception.
    */
-  request_time: ?string,
+  request_time: void | ?string,
 };
 
 
@@ -551,15 +551,15 @@ export type AdmissionAttributes = {
   /**
    * MAC address.
    */
-  mac: ?string,
+  mac: void | ?string,
   /**
    * Stock keeping unit.
    */
-  sku: ?string,
+  sku: void | ?string,
   /**
    * Serial number.
    */
-  sn: ?string,
+  sn: void | ?string,
 };
 
 
@@ -621,9 +621,9 @@ export default class Mender {
    * @param hasGroup - If present, limits the results only to devices assigned/not assigned to a group.
    * @return Promise<Device> -  -
    */
-  getDevices(page: ?number, per_page: ?number, sort: ?string, has_group: ?boolean): Promise<Device> {
+  getDevices(page: void | ?number, per_page: void | ?number, sort: void | ?string, has_group: void | ?boolean): Promise<?Array<Device>> {
     return this._axios.get(`/inventory/devices`, {
-      param: {
+      params: {
         page: page,
         per_page: per_page,
         sort: sort,
@@ -643,7 +643,7 @@ export default class Mender {
    * @param id - Device identifier.
    * @return Promise<Device> -  -
    */
-  getDevices(id: string): Promise<Device> {
+  getDevice(id: string): Promise<Device> {
     return this._axios.get(`/inventory/devices/${id}`).then(res => res.data);
   }
 
@@ -742,9 +742,9 @@ export default class Mender {
    * @param name - Group name.
    * @return Promise<Array<string>> -  -
    */
-  getGroupDevices(page: ?number, per_page: ?number, name: string): Promise<Array<string>> {
+  getGroupDevices(page: void | ?number, per_page: void | ?number, name: string): Promise<Array<string>> {
     return this._axios.get(`/inventory/groups/${name}/devices`, {
-      param: {
+      params: {
         page: page,
         per_page: per_page,
       }
@@ -771,8 +771,8 @@ All responses from the API will contain 'X-MEN-RequestID' header with server-sid
 
    * @return Promise<any> -  -
    */
-  login(): Promise<any> {
-    return this._axios.post(`/useradm/auth/login`).then(res => res.data);
+  login(username: string, password: string): Promise<any> {
+    return this._axios.post(`/useradm/auth/login`, null, { auth: { username: username, password: password } }).then(res => res.data);
   }
 
 
@@ -905,9 +905,9 @@ All responses from the API will contain 'X-MEN-RequestID' header with server-sid
    * @param deviceId - List auth sets owned by given device
    * @return Promise<AdmissionDevice> -  -
    */
-  getAdmissionDevices(status: ?string, page: ?number, per_page: ?number, device_id: ?string): Promise<AdmissionDevice> {
+  getAdmissionDevices(status: void | ?string, page: void | ?number, per_page: void | ?number, device_id: void | ?string): Promise<AdmissionDevice> {
     return this._axios.get(`/admission/devices`, {
-      param: {
+      params: {
         status: status,
         page: page,
         per_page: per_page,
@@ -943,7 +943,7 @@ All responses from the API will contain 'X-MEN-RequestID' header with server-sid
    * @param id - Device authentication data set identifier.
    * @return Promise<Device> -  -
    */
-  getAdmissionDeviceById(id: string): Promise<AdminssionDevice> {
+  getAdmissionDeviceById(id: string): Promise<AdmissionDevice> {
     return this._axios.get(`/admission/devices/${id}`).then(res => res.data);
   }
 
@@ -1042,9 +1042,9 @@ All responses from the API will contain 'X-MEN-RequestID' header with server-sid
    * @param createdAfter - List only deployments created after and equal to Unix timestamp (UTC)
    * @return Promise<Deployment> -  -
    */
-  getDeployments(status: ?string, search: ?string, page: ?number, per_page: ?number, created_before: ?number, created_after: ?number): Promise<Deployment> {
+  getDeployments(status: void | ?string, search: void | ?string, page: void | ?number, per_page: void | ?number, created_before: void | ?number, created_after: void | ?number): Promise<Deployment> {
     return this._axios.get(`/deployments/deployments`, {
-      param: {
+      params: {
         status: status,
         search: search,
         page: page,
@@ -1188,9 +1188,9 @@ All responses from the API will contain 'X-MEN-RequestID' header with server-sid
    * @param name - Release name filter.
    * @return Promise<Release> -  -
    */
-  getDeploymentsReleases(name: ?string): Promise<Release> {
+  getDeploymentsReleases(name: void | ?string): Promise<Release> {
     return this._axios.get(`/deployments/deployments/releases`, {
-      param: {
+      params: {
         name: name,
       }
     }).then(res => res.data);
