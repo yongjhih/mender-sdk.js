@@ -1,6 +1,6 @@
 {
   "name": "mender",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Mender SDK for JavaScript",
   "main": "lib/mender.js",
   "author": "Andrew Chen <yongjhih@gmail.com>",
@@ -46,12 +46,7 @@
     "axios-debug-log": "^0.4.0",
     "flow-runtime": "^0.17.0",
     "flow-runtime-validators": "^0.17.0",
-    "fs": "^0.0.1-security",
     "fs-extra": "^5.0.0",
-    "immutable": "^3.8.2",
-    "moment": "^2.20.1",
-    "moment-timezone": "^0.5.14",
-    "rxjs": "^5.5.6",
     "validator": "^9.4.1"
   },
   "flow-coverage-report": {
