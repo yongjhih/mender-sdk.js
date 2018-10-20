@@ -1,5 +1,5 @@
 {
-  "name": "mender-sdk",
+  "name": "mender",
   "version": "0.0.1",
   "description": "Mender SDK for JavaScript",
   "main": "lib/mender.js",

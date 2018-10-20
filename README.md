@@ -41,19 +41,19 @@ ref. https://github.com/azure/autorest.typescript
 ## Installation
 
 ```sh
-yarn add git+ssh://git@github.com/yongjhih/mender-sdk.js.git#0.0.1
+yarn add mender.js
 ```
 
 for latest version:
 
 ```sh
-yarn add git+ssh://git@github.com/FloTechnologies/mender-sdk.js.git#dist
+yarn add git+ssh://git@github.com/yongjhih/mender.js.git#dist
 ```
 
 and also you can install specific commit of dist:
 
 ```
-yarn add git+ssh://git@github.com/FloTechnologies/mender-sdk.js.git#<commit-id>
+yarn add git+ssh://git@github.com/yongjhih/mender.js.git#<commit-id>
 ```
 
 
