@@ -9,7 +9,7 @@ import Mender from 'mender';
 const mender = new Mender(process.env.MENDER_URL);
 
 mender.login(username, password)
-  .subscribe(it => {
+  .then(it => {
     console.log(it);
   }, e => {
     console.error(e);
@@ -111,7 +111,7 @@ You can open docs/ to see
 
 * ES6
 * Functional
-* Promise and Rx
+* Promise
 
 * Type-safety
 * Null-safety
@@ -120,7 +120,6 @@ You can open docs/ to see
 
 * package manager: yarn (~~npm~~)
 * http client: axios (~~request~~, ~~node-fetch~~)
-* axios wrapped rx
 * static type checking: facebook/flow (~~Microsoft/TypeScript~~, ~~Google/Dart~~, ~~kotlin2javascript~~)
 * runtime type checking: codemix/flow-runtime (~~tcomb~~)
 * testing frameworks: jest (~~mocha~~, ~~karma~~, ~~jasmine~~)
