@@ -6,10 +6,10 @@
 ```js
 import Mender from 'mender';
 
-const mender = new Mender(process.env.FLO_BASE_URL);
+const mender = new Mender(process.env.MENDER_URL);
 
 mender.login(username, password)
-  .subscribe(it => {
+  .then(it => {
     console.log(it);
   }, e => {
     console.error(e);
@@ -29,31 +29,31 @@ mender.login(username, password)
 * Minio object storage
 * Storage service proxy based on OpenResty
 
-## Code Generate from swagger by autorest
-
+## Code Generating From swagger
 
 ```sh
-yarn run autorest --input-file=docs/_data/mender.yml --nodejs --output-folder=autorest
+yarn add -d swagger-codegen-axios-flow
+yarn run swagger-codegen-axios-flow < docs/_data/inventory.json > docs/_data/inventory.js
 ```
 
-ref. https://github.com/azure/autorest.typescript
+ref. https://github.com/yongjhih/swagger-codegen-axios-flow
 
 ## Installation
 
 ```sh
-yarn add git+ssh://git@github.com/yongjhih/mender-sdk.js.git#0.0.1
+yarn add mender
 ```
 
 for latest version:
 
 ```sh
-yarn add git+ssh://git@github.com/FloTechnologies/mender-sdk.js.git#dist
+yarn add git+ssh://git@github.com/yongjhih/mender.js.git#dist
 ```
 
 and also you can install specific commit of dist:
 
 ```
-yarn add git+ssh://git@github.com/FloTechnologies/mender-sdk.js.git#<commit-id>
+yarn add git+ssh://git@github.com/yongjhih/mender.js.git#<commit-id>
 ```
 
 
@@ -111,7 +111,7 @@ You can open docs/ to see
 
 * ES6
 * Functional
-* Promise and Rx
+* Promise
 
 * Type-safety
 * Null-safety
@@ -120,7 +120,6 @@ You can open docs/ to see
 
 * package manager: yarn (~~npm~~)
 * http client: axios (~~request~~, ~~node-fetch~~)
-* axios wrapped rx
 * static type checking: facebook/flow (~~Microsoft/TypeScript~~, ~~Google/Dart~~, ~~kotlin2javascript~~)
 * runtime type checking: codemix/flow-runtime (~~tcomb~~)
 * testing frameworks: jest (~~mocha~~, ~~karma~~, ~~jasmine~~)

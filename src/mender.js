@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 import {Axios} from 'axios';
+import type {AxiosXHRConfigBase} from 'axios';
 
 /*==========================================================
  *                    An API for device attribute management and device grouping. Intended for use by the web GUI.
@@ -567,9 +568,10 @@ export type AdmissionAttributes = {
 export default class Mender {
   _axios: Axios => *;
 
-  constructor(baseURL: string = "https://docker.mender.io/api/management/v1") {
+  constructor(config: AxiosXHRConfigBase = {}) {
     this._axios = axios.create({
-      baseURL: baseURL
+      ...config,
+      baseURL: config.baseURL || "https://docker.mender.io/api/management/v1",
     })
   }
 
