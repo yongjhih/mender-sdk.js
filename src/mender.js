@@ -568,7 +568,7 @@ export type AdmissionAttributes = {
 export default class Mender {
   _axios: Axios => *;
 
-  constructor(config: AxiosXHRConfigBase = {}) {
+  constructor(config: {} = {}) {
     this._axios = axios.create({
       ...config,
       baseURL: config.baseURL || "https://docker.mender.io/api/management/v1",
