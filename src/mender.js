@@ -623,13 +623,14 @@ export default class Mender {
    * @param hasGroup - If present, limits the results only to devices assigned/not assigned to a group.
    * @return Promise<Device> -  -
    */
-  getDevices(page: void | ?number, per_page: void | ?number, sort: void | ?string, has_group: void | ?boolean): Promise<?Array<Device>> {
+  getDevices(page: void | ?number, per_page: void | ?number, sort: void | ?string, has_group: void | ?boolean, attributes: ?{} = {}): Promise<?Array<Device>> {
     return this._axios.get(`/inventory/devices`, {
       params: {
         page: page,
         per_page: per_page,
         sort: sort,
         has_group: has_group,
+        ...attributes,
       }
     }).then(res => res.data);
   }
