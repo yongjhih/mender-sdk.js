@@ -1,6 +1,6 @@
 {
   "name": "mender",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Mender SDK for JavaScript",
   "main": "lib/mender.js",
   "author": "Andrew Chen <yongjhih@gmail.com>",
