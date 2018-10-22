@@ -38,7 +38,7 @@ Attribute type is implicit, inferred from the JSON type.
 Supported types: number, string, array of numbers, array of strings. Mixed arrays are not allowed.
 
    */
-  value: void | ?string,
+  value: void | ?number | ?string | ?Array<number> | ?Array<string> | ?boolean,
 };
 
 
