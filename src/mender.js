@@ -3,6 +3,10 @@
 import axios from 'axios';
 import {Axios} from 'axios';
 import type {AxiosXHRConfigBase} from 'axios';
+import type {AxiosPromise} from 'axios';
+// AxiosPromise Warning?
+// AxiosResponse is not in flowtyped yet
+import Rx from 'rxjs';
 
 /*==========================================================
  *                    An API for device attribute management and device grouping. Intended for use by the web GUI.
@@ -635,6 +639,47 @@ export default class Mender {
     }).then(res => res.data);
   }
 
+  getDevicesPaging(page: void | ?number, per_page: void | ?number, sort: void | ?string, has_group: void | ?boolean, attributes: ?{} = {}): Rx.Observable<Device> {
+    // AxiosResponse is not in flowtyped yet
+    const get = (page: void | ?number, perPage: void | ?number, sort: void | ?string, hasGroup: void | ?boolean, attributes: void | ?{} = {}): Promise<any> => {
+      return this._axios.get(`/inventory/devices`, {
+        params: {
+          page: page,
+          per_page: per_page,
+          sort: sort,
+          has_group: has_group,
+          ...attributes,
+        }
+      });
+    };
+
+    const parseLink = require('parse-link-header');
+    const qs = require('qs');
+
+    let _page = page || 1; // for next page only if no next link
+    return Rx.Observable.fromPromise(get(page, perPage, sort, hasGroup, attributes))
+    .expand(res => {
+      if (res.headers && res.headers.link) {
+        const link = parseLink(res.headers.link);
+        if (!link.next || !link.next.url) {
+          return Rx.Observable.empty();
+        }
+        const url = (link.next.url.startsWith('http://') || link.next.url.startsWith('https://')) ? link.next.url : `/inventory/${link.next.url}`;
+        delete link.next.url;
+        delete link.next.rel;
+        return Rx.Observable.fromPromise(this._axios.get(url, {
+          params: link.next
+        }));
+      } else if (!res.data || res.data.length == 0) {
+        return Rx.Observable.empty();
+      } else {
+        _page += 1;
+        return Rx.Observable.fromPromise(get(_page, perPage, sort, hasGroup, attributes));
+      }
+    })
+    .map(res => res.data)
+    .flatMap(it => Rx.Observable.from(it));
+  }
 
   /**
    * Returns the details of the selected devices, including its attributes.
