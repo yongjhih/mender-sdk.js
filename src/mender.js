@@ -641,7 +641,7 @@ export default class Mender {
 
   getDevicesPaging(page: void | ?number, per_page: void | ?number, sort: void | ?string, has_group: void | ?boolean, attributes: ?{} = {}): Rx.Observable<Device> {
     // AxiosResponse is not in flowtyped yet
-    const get = (page: void | ?number, perPage: void | ?number, sort: void | ?string, hasGroup: void | ?boolean, attributes: void | ?{} = {}): Promise<any> => {
+    const get = (page: void | ?number, per_page: void | ?number, sort: void | ?string, has_group: void | ?boolean, attributes: ?{} = {}): Promise<any> => {
       return this._axios.get(`/inventory/devices`, {
         params: {
           page: page,
@@ -657,7 +657,7 @@ export default class Mender {
     const qs = require('qs');
 
     let _page = page || 1; // for next page only if no next link
-    return Rx.Observable.fromPromise(get(page, perPage, sort, hasGroup, attributes))
+    return Rx.Observable.fromPromise(get(page, per_page, sort, has_group, attributes))
     .expand(res => {
       if (res.headers && res.headers.link) {
         const link = parseLink(res.headers.link);
@@ -674,7 +674,7 @@ export default class Mender {
         return Rx.Observable.empty();
       } else {
         _page += 1;
-        return Rx.Observable.fromPromise(get(_page, perPage, sort, hasGroup, attributes));
+        return Rx.Observable.fromPromise(get(_page, per_page, sort, has_group, attributes));
       }
     })
     .map(res => res.data)
