@@ -47,6 +47,9 @@
     "flow-runtime": "^0.17.0",
     "flow-runtime-validators": "^0.17.0",
     "fs-extra": "^5.0.0",
+    "parse-link-header": "^1.0.1",
+    "qs": "^6.5.2",
+    "rxjs": "^6.3.3",
     "validator": "^9.4.1"
   },
   "flow-coverage-report": {
