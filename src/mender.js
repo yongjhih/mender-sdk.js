@@ -8,6 +8,8 @@ import type {AxiosPromise} from 'axios';
 // AxiosResponse is not in flowtyped yet
 import Rx from 'rxjs';
 
+export type File = string | any; // string, an ArrayBuffer, a Buffer, or a Stream
+
 /*==========================================================
  *                    An API for device attribute management and device grouping. Intended for use by the web GUI.
 
@@ -62,7 +64,7 @@ export type NewDeployment = {
   /**
    *
    */
-  devices: Array<?string>,
+  devices: Array<string>,
 };
 
 
@@ -742,8 +744,8 @@ export default class Mender {
    * @param group - Group descriptor.
    * @return Promise<any> -  -
    */
-  addGroupDevice(id: string): Promise<any> {
-    return this._axios.put(`/inventory/devices/${id}/group`).then(res => res.data);
+  addGroupDevice(id: string, group: Group): Promise<any> {
+    return this._axios.put(`/inventory/devices/${id}/group`, group).then(res => res.data);
   }
 
 
@@ -849,8 +851,8 @@ All responses from the API will contain 'X-MEN-RequestID' header with server-sid
    * @param authorization - Contains the JWT token issued by the User Administration and Authentication Service.
    * @return Promise<any> -  -
    */
-  postUsers(): Promise<any> {
-    return this._axios.post(`/useradm/users`).then(res => res.data);
+  postUsers(user: UserNew): Promise<any> {
+    return this._axios.post(`/useradm/users`, user).then(res => res.data);
   }
 
 
@@ -882,8 +884,8 @@ All responses from the API will contain 'X-MEN-RequestID' header with server-sid
    * @param authorization - Contains the JWT token issued by the User Administration and Authentication Service.
    * @return Promise<any> -  -
    */
-  putUsersById(id: string): Promise<any> {
-    return this._axios.put(`/useradm/users/${id}`).then(res => res.data);
+  putUsersById(id: string, userUpdate): Promise<any> {
+    return this._axios.put(`/useradm/users/${id}`, userUpdate).then(res => res.data);
   }
 
 
@@ -929,8 +931,8 @@ All responses from the API will contain 'X-MEN-RequestID' header with server-sid
    * @param authorization - Contains the JWT token issued by the User Administration and Authentication Service.
    * @return Promise<any> -  -
    */
-  postSettings(): Promise<any> {
-    return this._axios.post(`/useradm/settings`).then(res => res.data);
+  postSettings(settings: Settings): Promise<any> {
+    return this._axios.post(`/useradm/settings`, settings).then(res => res.data);
   }
 
   /* {{{ deviceadm }}} */
@@ -980,8 +982,8 @@ All responses from the API will contain 'X-MEN-RequestID' header with server-sid
    * @param authSet - The authentication data set to be preauthorized
    * @return Promise<any> -  -
    */
-  postDevices(): Promise<any> {
-    return this._axios.post(`/admission/devices`).then(res => res.data);
+  postDevices(authSet: AuthSet): Promise<any> {
+    return this._axios.post(`/admission/devices`, authSet).then(res => res.data);
   }
 
 
@@ -1011,9 +1013,10 @@ All responses from the API will contain 'X-MEN-RequestID' header with server-sid
    * @param id - Device authentication data set identifier.
    * @param device - A device for admission.
    * @return Promise<any> -  -
+   * @deprecated
    */
-  putDevicesById(id: string): Promise<any> {
-    return this._axios.put(`/admission/devices/${id}`).then(res => res.data);
+  putDevicesById(id: string, device: NewDevice): Promise<any> {
+    return this._axios.put(`/admission/devices/${id}`, device).then(res => res.data);
   }
 
 
@@ -1064,8 +1067,8 @@ All responses from the API will contain 'X-MEN-RequestID' header with server-sid
    * @param status - New status
    * @return Promise<Status> -  -
    */
-  putDevicesByIdStatus(id: string): Promise<Status> {
-    return this._axios.put(`/admission/devices/${id}/status`).then(res => res.data);
+  putDevicesByIdStatus(id: string, status: Status): Promise<Status> {
+    return this._axios.put(`/admission/devices/${id}/status`, status).then(res => res.data);
   }
 
 
@@ -1120,8 +1123,8 @@ All responses from the API will contain 'X-MEN-RequestID' header with server-sid
    * @param deployment - New deployment that needs to be created.
    * @return Promise<any> -  -
    */
-  postDeployments(): Promise<any> {
-    return this._axios.post(`/deployments/deployments`).then(res => res.data);
+  postDeployments(deployment: NewDeployment): Promise<any> {
+    return this._axios.post(`/deployments/deployments`, deployment).then(res => res.data);
   }
 
 
@@ -1156,8 +1159,8 @@ All responses from the API will contain 'X-MEN-RequestID' header with server-sid
    * @param status - Deployment status.
    * @return Promise<any> -  -
    */
-  putDeploymentsByDeploymentIdStatus(deployment_id: string): Promise<any> {
-    return this._axios.put(`/deployments/deployments/${deployment_id}/status`).then(res => res.data);
+  putDeploymentsByDeploymentIdStatus(deployment_id: string, status: Status): Promise<any> {
+    return this._axios.put(`/deployments/deployments/${deployment_id}/status`, status).then(res => res.data);
   }
 
 
@@ -1269,13 +1272,18 @@ All responses from the API will contain 'X-MEN-RequestID' header with server-sid
    * method: postArtifacts_TYPE
    * raw_url: postArtifacts_RAW_URL
    * @param authorization - Contains the JWT token issued by the User Administration and Authentication Service.
-   * @param size - Size of the artifact file in bytes.
-   * @param description -
-   * @param artifact - Artifact. It has to be the last part of request.
+   * @param size integer - Size of the artifact file in bytes.
+   * @param description string -
+   * @param artifact File - Artifact. It has to be the last part of request. string, an ArrayBuffer, a Buffer, or a Stream
    * @return Promise<any> -  -
    */
-  postArtifacts(): Promise<any> {
-    return this._axios.post(`/deployments/artifacts`).then(res => res.data);
+  postArtifacts(size: number, description: void | ?string, artifact: File): Promise<any> {
+    const formData = new FormData();
+    formData.append(`size`, size);
+    formData.append(`description`, description);
+    formData.append(`artifact`, artifact);
+    const qs = require('qs');
+    return this._axios.post(`/deployments/artifacts`, qs.stringify(formData), { headers: {'Content-Type': 'multipart/form-data'} }).then(res => res.data);
   }
 
 
@@ -1304,12 +1312,12 @@ All responses from the API will contain 'X-MEN-RequestID' header with server-sid
    * method: putArtifactsById_TYPE
    * raw_url: putArtifactsById_RAW_URL
    * @param authorization - Contains the JWT token issued by the User Administration and Authentication Service.
-   * @param id - Artifact identifier.
-   * @param artifact -
+   * @param id string - Artifact identifier.
+   * @param artifact ArtifactUpdate -
    * @return Promise<any> -  -
    */
-  putArtifactsById(id: string): Promise<any> {
-    return this._axios.put(`/deployments/artifacts/${id}`).then(res => res.data);
+  putArtifactsById(id: string, artifact: ArtifactUpdate): Promise<any> {
+    return this._axios.put(`/deployments/artifacts/${id}`, artifact).then(res => res.data);
   }
 
 

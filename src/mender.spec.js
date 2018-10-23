@@ -113,6 +113,7 @@ it('should getGroup()', done => {
 it('should addGroupDevice()', done => {
 
   const id = "Carmella_Muller97";
+  const group = "Carmella_Muller97_group";
 
 
   nock(`https://docker.mender.io/api/management/v1/inventory`)
@@ -121,7 +122,7 @@ it('should addGroupDevice()', done => {
 
       })
       .reply(200, {});
-  mender.addGroupDevice(id).then(res => {
+  mender.addGroupDevice(id, { group: group }).then(res => {
         done();
     }, err => {
         console.error(err);
@@ -215,6 +216,9 @@ it('should getDeployments()', done => {
 it('should postDeployments()', done => {
 
 
+  const name = "name";
+  const artifact_name = "artifact_name";
+  const devices = [];
 
   nock(`https://docker.mender.io/api/management/v1/deployments`)
       .post(`/deployments`)
@@ -222,7 +226,11 @@ it('should postDeployments()', done => {
 
       })
       .reply(200, {});
-  mender.postDeployments().then(res => {
+  mender.postDeployments({
+        name: name,
+        artifact_name: artifact_name,
+        devices: devices,
+      }).then(res => {
         done();
     }, err => {
         console.error(err);
@@ -253,6 +261,7 @@ it('should getDeploymentsById()', done => {
 it('should putDeploymentsByDeploymentIdStatus()', done => {
 
   const deployment_id = "Marcos52";
+  const status = "pending";
 
 
   nock(`https://docker.mender.io/api/management/v1/deployments`)
@@ -261,7 +270,9 @@ it('should putDeploymentsByDeploymentIdStatus()', done => {
 
       })
       .reply(200, {});
-  mender.putDeploymentsByDeploymentIdStatus(deployment_id).then(res => {
+  mender.putDeploymentsByDeploymentIdStatus(deployment_id, {
+     status: status
+    }).then(res => {
         done();
     }, err => {
         console.error(err);
@@ -388,14 +399,13 @@ it('should postArtifacts()', done => {
 
 
 
-
   nock(`https://docker.mender.io/api/management/v1/deployments`)
       .post(`/artifacts`)
       .query({
 
       })
       .reply(200, {});
-  mender.postArtifacts().then(res => {
+  mender.postArtifacts(0, undefined, Buffer.from('yo')).then(res => {
         done();
     }, err => {
         console.error(err);
@@ -426,6 +436,7 @@ it('should getArtifactsById()', done => {
 it('should putArtifactsById()', done => {
 
   const id = "Darion_Stanton87";
+  const description = "Darion_Stanton87";
 
 
   nock(`https://docker.mender.io/api/management/v1/deployments`)
@@ -434,7 +445,7 @@ it('should putArtifactsById()', done => {
 
       })
       .reply(200, {});
-  mender.putArtifactsById(id).then(res => {
+  mender.putArtifactsById(id, { description: description }).then(res => {
         done();
     }, err => {
         console.error(err);
@@ -525,6 +536,8 @@ it('should getAdmissionDevices()', done => {
 it('should postDevices()', done => {
 
 
+  const device_identity = "abc";
+  const key = "abc";
 
   nock(`https://docker.mender.io/api/management/v1/admission`)
       .post(`/devices`)
@@ -532,7 +545,10 @@ it('should postDevices()', done => {
 
       })
       .reply(200, {});
-  mender.postDevices().then(res => {
+  mender.postDevices({
+    device_identity: device_identity,
+    key: key,
+  }).then(res => {
         done();
     }, err => {
         console.error(err);
@@ -563,7 +579,9 @@ it('should getDevicesById()', done => {
 it('should putDevicesById()', done => {
 
   const id = "Norene_Roob";
-
+  const device_identity = "Norene_Roob";
+  const key = "Norene_Roob";
+  const device_id = "Norene_Roob";
 
   nock(`https://docker.mender.io/api/management/v1/admission`)
       .put(`/devices/${id}`)
@@ -571,7 +589,11 @@ it('should putDevicesById()', done => {
 
       })
       .reply(200, {});
-  mender.putDevicesById(id).then(res => {
+  mender.putDevicesById(id, {
+    device_identity: device_identity,
+    key: key,
+    device_id: device_id,
+  }).then(res => {
         done();
     }, err => {
         console.error(err);
@@ -621,6 +643,7 @@ it('should getDevicesByIdStatus()', done => {
 it('should putDevicesByIdStatus()', done => {
 
   const id = "Amira.Paucek";
+  const status = "Amira.Paucek";
 
 
   nock(`https://docker.mender.io/api/management/v1/admission`)
@@ -629,7 +652,9 @@ it('should putDevicesByIdStatus()', done => {
 
       })
       .reply(200, {status: id});
-  mender.putDevicesByIdStatus(id).then(res => {
+  mender.putDevicesByIdStatus(id, {
+    status: status,
+  }).then(res => {
         done();
     }, err => {
         console.error(err);
@@ -681,6 +706,8 @@ it('should getUsers()', done => {
 it('should postUsers()', done => {
 
 
+  const email = "abc@example.com";
+  const password = "Abc";
 
   nock(`https://docker.mender.io/api/management/v1/useradm`)
       .post(`/users`)
@@ -688,7 +715,10 @@ it('should postUsers()', done => {
 
       })
       .reply(200, {});
-  mender.postUsers().then(res => {
+  mender.postUsers({
+    email: email,
+    password: password,
+  }).then(res => {
         done();
     }, err => {
         console.error(err);
@@ -783,7 +813,7 @@ it('should postSettings()', done => {
 
       })
       .reply(200, {});
-  mender.postSettings().then(res => {
+  mender.postSettings({}).then(res => {
         done();
     }, err => {
         console.error(err);
