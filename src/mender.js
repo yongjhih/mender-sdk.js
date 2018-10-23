@@ -664,7 +664,7 @@ export default class Mender {
         if (!link.next || !link.next.url) {
           return Rx.Observable.empty();
         }
-        const url = (link.next.url.startsWith('http://') || link.next.url.startsWith('https://')) ? link.next.url : `/inventory/${link.next.url}`;
+        const url = (link.next.url.startsWith('http://') || link.next.url.startsWith('https://')) ? link.next.url.replace(/\?.*$/, '') : `/inventory/${link.next.url}`.replace(/\?.*$/, '');
         delete link.next.url;
         delete link.next.rel;
         return Rx.Observable.fromPromise(this._axios.get(url, {
