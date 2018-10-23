@@ -1,8 +1,8 @@
 /* @flow */
 
 import axios from 'axios';
-axios.defaults.adapter = httpAdapter;
 import httpAdapter from 'axios/lib/adapters/http';
+axios.defaults.adapter = httpAdapter;
 import Mender from './mender';
 import nock from 'nock';
 import os from 'os';
@@ -29,6 +29,27 @@ it('should getDevices()', done => {
         console.error(err);
         done.fail(err);
     });
+});
+
+
+it('should getDevicesPaging()', done => {
+  const page: ?number = 67908;
+  const per_page: ?number = 46353;
+  const sort: ?string = "George_Bogan";
+  const has_group: ?boolean = true;
+
+  nock(`https://docker.mender.io/api/management/v1/inventory`)
+      .get(`/devices`)
+      .query({
+        page: page, per_page: per_page, sort: sort, has_group: has_group
+      })
+      .reply(200, []);
+  mender.getDevicesPaging(page, per_page, sort, has_group).subscribe(res => {
+        done();
+    }, err => {
+        console.error(err);
+        done.fail(err);
+    }, () => done());
 });
 
 
