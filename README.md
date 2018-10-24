@@ -24,6 +24,7 @@ mender.login(username, password)
 * Mender Device Inventory Service:
   - https://github.com/mendersoftware/inventory
   - https://github.com/mendersoftware/deviceadm
+  - https://github.com/mendersoftware/deviceauth/blob/master/docs/management_api.yml
 * Mender User Administration Service: https://github.com/mendersoftware/useradm
 * Mender API Gateway
 * Minio object storage

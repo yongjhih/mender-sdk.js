@@ -843,3 +843,176 @@ it('should postSettings()', done => {
         done.fail(err);
     });
 });
+
+
+it('should getAuthDevices()', done => {
+
+  const page = 87105;
+  const per_page = 84136;
+
+  nock(`https://docker.mender.io/api/management/v1/devauth`)
+      .get(`/devices`)
+      .query({
+        page: page, per_page: per_page
+      })
+      .reply(200, []);
+  mender.getAuthDevices(page, per_page).then(res => {
+        done();
+    }, err => {
+        console.error(err);
+        done.fail(err);
+    });
+});
+
+
+it('should postAuthDevices()', done => {
+
+
+
+  nock(`https://docker.mender.io/api/management/v1/devauth`)
+      .post(`/devices`)
+      .query({
+
+      })
+      .reply(200, {});
+  mender.postAuthDevices().then(res => {
+        done();
+    }, err => {
+        console.error(err);
+        done.fail(err);
+    });
+});
+
+
+it('should getAuthDevicesById()', done => {
+
+  const id = "Seth.White47";
+
+  nock(`https://docker.mender.io/api/management/v1/devauth`)
+      .get(`/devices/${id}`)
+      .query({
+
+      })
+      .reply(200, {});
+  mender.getAuthDevicesById(id).then(res => {
+        done();
+    }, err => {
+        console.error(err);
+        done.fail(err);
+    });
+});
+
+
+it('should deleteAuthDevicesById()', done => {
+
+  const id = "Malcolm.Toy93";
+
+  nock(`https://docker.mender.io/api/management/v1/devauth`)
+      .delete(`/devices/${id}`)
+      .query({
+
+      })
+      .reply(200, {});
+  mender.deleteAuthDevicesById(id).then(res => {
+        done();
+    }, err => {
+        console.error(err);
+        done.fail(err);
+    });
+});
+
+
+it('should deleteAuthDevicesByIdAuthByAid()', done => {
+
+  const id = "Uriah99";
+  const aid = "Gabe.Schimmel16";
+
+  nock(`https://docker.mender.io/api/management/v1/devauth`)
+      .delete(`/devices/${id}/auth/${aid}`)
+      .query({
+
+      })
+      .reply(200, {});
+  mender.deleteAuthDevicesByIdAuthByAid(id, aid).then(res => {
+        done();
+    }, err => {
+        console.error(err);
+        done.fail(err);
+    });
+});
+
+
+it('should putAuthDevicesByIdAuthByAidStatus()', done => {
+
+  const id = "Janice_Bogan97";
+  const aid = "Betty_Schroeder";
+
+
+  nock(`https://docker.mender.io/api/management/v1/devauth`)
+      .put(`/devices/${id}/auth/${aid}/status`)
+      .query({
+
+      })
+      .reply(200, {});
+  mender.putAuthDevicesByIdAuthByAidStatus(id, aid).then(res => {
+        done();
+    }, err => {
+        console.error(err);
+        done.fail(err);
+    });
+});
+
+
+it('should getAuthDevicesCount()', done => {
+
+  const status = "Lily_Maggio";
+
+  nock(`https://docker.mender.io/api/management/v1/devauth`)
+      .get(`/devices/count`)
+      .query({
+        status: status
+      })
+      .reply(200, {});
+  mender.getAuthDevicesCount(status).then(res => {
+        done();
+    }, err => {
+        console.error(err);
+        done.fail(err);
+    });
+});
+
+
+it('should deleteTokensById()', done => {
+  const id = "Ivory35";
+
+  nock(`https://docker.mender.io/api/management/v1/devauth`)
+      .delete(`/tokens/${id}`)
+      .query({
+
+      })
+      .reply(200, {});
+  mender.deleteTokensById(id).then(res => {
+        done();
+    }, err => {
+        console.error(err);
+        done.fail(err);
+    });
+});
+
+
+it('should getLimitsMaxAuthDevices()', done => {
+
+
+  nock(`https://docker.mender.io/api/management/v1/devauth`)
+      .get(`/limits/max_devices`)
+      .query({
+
+      })
+      .reply(200, {limit: 500});
+  mender.getLimitsMaxAuthDevices().then(res => {
+        done();
+    }, err => {
+        console.error(err);
+        done.fail(err);
+    });
+});
