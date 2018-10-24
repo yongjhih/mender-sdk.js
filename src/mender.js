@@ -1106,6 +1106,48 @@ All responses from the API will contain 'X-MEN-RequestID' header with server-sid
     }).then(res => res.data);
   }
 
+  getDeploymentsPaging(status: void | ?string, search: void | ?string, page: void | ?number, per_page: void | ?number, created_before: void | ?number, created_after: void | ?number): Rx.Observable<Deployment> {
+    // AxiosResponse is not in flowtyped yet
+    const get = (status: void | ?string, search: void | ?string, page: void | ?number, per_page: void | ?number, created_before: void | ?number, created_after: void | ?number): Promise<any> => {
+      return this._axios.get(`/deployments/deployments`, {
+        params: {
+          status: status,
+          search: search,
+          page: page,
+          per_page: per_page,
+          created_before: created_before,
+          created_after: created_after,
+        }
+      });
+    };
+
+    const parseLink = require('parse-link-header');
+    const qs = require('qs');
+
+    let _page = page || 1; // for next page only if no next link
+    return Rx.Observable.fromPromise(get(status, search, page, per_page, created_before, created_after))
+    .expand(res => {
+      if (res.headers && res.headers.link) {
+        const link = parseLink(res.headers.link);
+        if (!link.next || !link.next.url) {
+          return Rx.Observable.empty();
+        }
+        const url = (link.next.url.startsWith('http://') || link.next.url.startsWith('https://')) ? link.next.url.replace(/\?.*$/, '') : `/inventory/${link.next.url}`.replace(/\?.*$/, '');
+        delete link.next.url;
+        delete link.next.rel;
+        return Rx.Observable.fromPromise(this._axios.get(url, {
+          params: link.next
+        }));
+      } else if (!res.data || res.data.length == 0) {
+        return Rx.Observable.empty();
+      } else {
+        _page += 1;
+        return Rx.Observable.fromPromise(get(status, search, _page, per_page, created_before, created_after));
+      }
+    })
+    .map(res => res.data)
+    .flatMap(it => Rx.Observable.from(it));
+  }
 
   /**
    * Deploy software to specified devices. Artifact is auto assigned to the
