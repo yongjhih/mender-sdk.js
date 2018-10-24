@@ -212,6 +212,29 @@ it('should getDeployments()', done => {
     });
 });
 
+it('should getDeploymentsPaging()', done => {
+
+  const status: ?string = "Grant59";
+  const search: ?string = "Jaida_Connelly31";
+  const page: ?number = 63340;
+  const per_page: ?number = 12992;
+  const created_before: ?number = 43366;
+  const created_after: ?number = 26859;
+
+  nock(`https://docker.mender.io/api/management/v1/deployments`)
+      .get(`/deployments`)
+      .query({
+        status: status, search: search, page: page, per_page: per_page, created_before: created_before, created_after: created_after
+      })
+      .reply(200, []);
+  mender.getDeploymentsPaging(status, search, page, per_page, created_before, created_after).subscribe(res => {
+        done();
+    }, err => {
+        console.error(err);
+        done.fail(err);
+    }, () => done());
+});
+
 
 it('should postDeployments()', done => {
 
